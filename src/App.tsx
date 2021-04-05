@@ -71,15 +71,13 @@ function App() {
                             : <></>
                         }
                       </Label>
-                      <Label>
-                        {
-                          x.tags.map((y, i) => (
-                            <Label.Detail horizontal style={{ marginLeft: i === 0 ? '0' : '0.5em' }}>
-                              {y}
-                            </Label.Detail>
-                          ))
-                        }
-                      </Label>
+                      {
+                        x.tags.map(y => (
+                          <Label as='a' style={{ marginLeft: '0' }}>
+                            {y}
+                          </Label>
+                        ))
+                      }
                     </List.Header>
                     <List.Description>
                       <Segment>
