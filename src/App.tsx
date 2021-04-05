@@ -9,13 +9,19 @@ function App() {
 
   const selectProjects = projects.filter(x => x.tags.find(y => tagsSelected.includes(y)));
 
+  const setTagsSorted = (tags: string[]) => {
+    const idx = (x: string) => allTags.findIndex(y => y === x);
+    const sorted = tags.sort((a, b) => idx(a) - idx(b));
+    setTagsSelected(sorted);
+  }
+
   const handleDeleteTag = (tag: string) => {
     const tags = tagsSelected.filter(x => x !== tag);
-    setTagsSelected(tags);
+    setTagsSorted(tags);
   };
 
   const handleAddTag = (tag: string) => {
-    setTagsSelected([tag, ...tagsSelected]);
+    setTagsSorted([tag, ...tagsSelected]);
   };
 
   const parseUrl = (url: string) => {
@@ -28,6 +34,21 @@ function App() {
     return result;
   };
 
+  const styles = {
+    noSelect: {
+      userSelect: 'none',
+    },
+    tag: {
+      marginLeft: 0,
+      marginRight: '0.3em',
+      marginBottom: '0.2em',
+    },
+    // plus icon margin이 잘못 설계됐다. margin left/right가 뒤집혀서 수동으로
+    plusIcon: {
+      margin: '0 0 0 0.5em',
+    },
+  };
+
   return (
     <div>
       <Header as='h1' content='portfolio page - prototype' style={{ marginTop: '3em' }} textAlign='center' />
@@ -35,20 +56,20 @@ function App() {
 
       <Container>
         <Header content='tags' textAlign='center' attached='top' block />
-        <Segment attached>
+        <Segment attached style={styles.noSelect}>
           {
             tagsSelected.map(x => <>
-              <Label color='blue' key={x}>
+              <Label color='blue' key={x} as='a' style={styles.tag} onClick={() => handleDeleteTag(x)}>
                 {x}
-                <Icon name='delete' link onClick={() => handleDeleteTag(x)} />
+                <Icon name='delete' />
               </Label>
             </>)
           }
           {
             tagsNotSelected.map(x => <>
-              <Label key={x}>
+              <Label key={x} as='a' style={styles.tag} onClick={() => handleAddTag(x)}>
                 {x}
-                <Icon name='plus' link onClick={() => handleAddTag(x)} />
+                <Icon name='plus' style={styles.plusIcon} />
               </Label>
             </>)
           }
