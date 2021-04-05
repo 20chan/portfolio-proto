@@ -18,6 +18,16 @@ function App() {
     setTagsSelected([tag, ...tagsSelected]);
   };
 
+  const parseUrl = (url: string) => {
+    const parsed = new URL(url);
+    const { host } = parsed;
+    const result = host.split('.')[0];
+    if (result === 'youtu') {
+      return 'youtube';
+    }
+    return result;
+  };
+
   return (
     <div>
       <Header as='h1' content='portfolio page - prototype' style={{ marginTop: '3em' }} textAlign='center' />
@@ -51,11 +61,30 @@ function App() {
               selectProjects.map(x => <>
                 <List.Item>
                   <List.Content>
-                    <List.Header as='a'>
-                      {x.name}
+                    <List.Header>
+                      <Label color='teal' as='a' href={x.link} image>
+                        {x.name}
+                        <Label.Detail horizontal>{x.date}</Label.Detail>
+                        {
+                          x.link
+                            ? <Label.Detail horizontal>{parseUrl(x.link)}</Label.Detail>
+                            : <></>
+                        }
+                      </Label>
+                      <Label>
+                        {
+                          x.tags.map((y, i) => (
+                            <Label.Detail horizontal style={{ marginLeft: i === 0 ? '0' : '0.5em' }}>
+                              {y}
+                            </Label.Detail>
+                          ))
+                        }
+                      </Label>
                     </List.Header>
                     <List.Description>
-                      {x.description}
+                      <Segment>
+                        {x.description}
+                      </Segment>
                     </List.Description>
                   </List.Content>
                 </List.Item>
